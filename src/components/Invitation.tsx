@@ -31,7 +31,10 @@ export function Invitation({ t, lang, date }: Props) {
           {/* Инициалы берём из имён, чтобы монограмма не разъезжалась с конфигом */}
           <p className="crest" aria-label={`${groom} & ${bride}`}>
             <span className="crest__letter">{groom.charAt(0)}</span>
-            <span className="crest__letter crest__letter--second">{bride.charAt(0)}</span>
+            <span className="crest__amp" aria-hidden="true">
+              &amp;
+            </span>
+            <span className="crest__letter">{bride.charAt(0)}</span>
           </p>
         </Reveal>
 

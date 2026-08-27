@@ -457,7 +457,8 @@ p {
 /* Монограмма: инициалы заходят друг на друга, как вензель */
 .crest {
   display: flex;
-  align-items: baseline;
+  /* center, а не baseline: иначе мелкий амперсанд прижимается к низу букв */
+  align-items: center;
   justify-content: center;
   margin: 0 0 clamp(24px, 4.5vh, 40px);
   font-family: var(--serif);
@@ -470,9 +471,14 @@ p {
   font-size: clamp(3.4rem, 16vw, 5.6rem);
 }
 
-.crest__letter--second {
-  margin-left: -0.2em;
+/*
+ * Без разделителя инициалы «Н» и «А» слипались в слово «НА».
+ * Амперсанд — тот же приём, что на обложке между именами.
+ */
+.crest__amp {
+  font-size: clamp(1.3rem, 6vw, 2.1rem);
   color: var(--gold);
+  padding: 0 clamp(10px, 3vw, 16px);
 }
 
 .invitation__text {
