@@ -780,3 +780,18 @@ p {
     0 0 0 1px rgba(236, 229, 216, 0.38),
     0 3px 10px rgba(0, 0, 0, 0.4);
 }
+
+/* Имена внутри кыргызского текста приглашения — отдельной строкой, как на печатных */
+.invitation__names {
+  display: block;
+  margin: 16px 0 14px;
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(1.4rem, 6vw, 1.85rem);
+  line-height: 1.25;
+  letter-spacing: 0.01em;
+  /* Абзац набран капслоком — имена возвращаем в обычный регистр */
+  text-transform: none;
+  color: var(--gold);
+}

@@ -16,6 +16,12 @@ export function Invitation({ t, lang, date }: Props) {
   const bride = config.bride[lang]
 
 
+  // В кыргызском тексте имена стоят отдельной строкой посреди абзаца,
+  // в русском плейсхолдера нет — тогда абзац выводится как есть.
+  const [beforeNames, afterNames] = t.inviteLong.split('{names}')
+  const genitiveNames = config.namesGenitive[lang]
+  const showNamesLine = afterNames !== undefined && Boolean(genitiveNames)
+
   return (
     <section className="invitation" id="details">
       {config.invitePhoto && (
@@ -42,7 +48,17 @@ export function Invitation({ t, lang, date }: Props) {
         </Reveal>
 
         <Reveal delay={120}>
-          <p className="invitation__text">{t.inviteLong}</p>
+          <p className="invitation__text">
+            {showNamesLine ? (
+              <>
+                {beforeNames}
+                <span className="invitation__names">{genitiveNames}</span>
+                {afterNames}
+              </>
+            ) : (
+              t.inviteLong.replace('{names}', '')
+            )}
+          </p>
         </Reveal>
 
         {config.hosts[lang] && (
