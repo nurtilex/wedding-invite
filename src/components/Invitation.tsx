@@ -19,11 +19,14 @@ export function Invitation({ t, lang, date }: Props) {
   return (
     <section className="invitation" id="details">
       {config.invitePhoto && (
-        <div
-          className="invitation__photo"
-          aria-hidden="true"
-          style={{ '--invitation-photo': `url('${config.invitePhoto}')` } as CSSProperties}
-        />
+        <>
+          <div
+            className="invitation__photo"
+            aria-hidden="true"
+            style={{ '--invitation-photo': `url('${config.invitePhoto}')` } as CSSProperties}
+          />
+          <div className="invitation__scrim" aria-hidden="true" />
+        </>
       )}
 
       <div className="invitation__inner">

@@ -10,11 +10,14 @@ export function Cover({ t, lang, date }: Props) {
   return (
     <header className="cover">
       {config.coverPhoto && (
-        <div
-          className="cover__photo"
-          aria-hidden="true"
-          style={{ '--cover-photo': `url('${config.coverPhoto}')` } as CSSProperties}
-        />
+        <>
+          <div
+            className="cover__photo"
+            aria-hidden="true"
+            style={{ '--cover-photo': `url('${config.coverPhoto}')` } as CSSProperties}
+          />
+          <div className="cover__scrim" aria-hidden="true" />
+        </>
       )}
       <div className="cover__frame" aria-hidden="true" />
 

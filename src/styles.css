@@ -1,14 +1,17 @@
 /* ─────────────────  ТОКЕНЫ  ───────────────── */
 :root {
-  --bg: #101b2d;          /* глубокий тёмно-синий — основной фон */
-  --bg-2: #16243a;        /* блок «О торжестве» — на тон светлее */
-  --ink: #ece5d8;         /* тёплый белый, не стерильно-белый */
-  --ink-2: #97a4b8;       /* второстепенный текст, холодный серо-синий */
-  --gold: #c9a96a;        /* акцент */
-  --gold-soft: #a8905c;   /* приглушённое золото для рамок и орнамента */
-  --line: #2b3d59;        /* тонкие линии и границы */
-  --line-soft: rgba(150, 175, 215, 0.16);
-  --chip: rgba(16, 27, 45, 0.72);  /* фон плашек языка и музыки */
+  --bg: #1f3760;          /* насыщенный синий — основной фон */
+  /* Те же цифры отдельно: из них собираются полупрозрачные затемнения
+     поверх фотографий. Меняете --bg — обязательно меняйте и это. */
+  --bg-rgb: 31 55 96;
+  --bg-2: #26406e;        /* страница приглашения — на тон светлее */
+  --ink: #f4eee4;         /* тёплый белый, не стерильно-белый */
+  --ink-2: #b6c3d6;       /* второстепенный текст, холодный серо-синий */
+  --gold: #d8b878;        /* акцент */
+  --gold-soft: #b99a63;   /* приглушённое золото для рамок и орнамента */
+  --line: #486190;        /* тонкие линии и границы */
+  --line-soft: rgba(185, 210, 245, 0.22);
+  --chip: rgb(var(--bg-rgb) / 0.72);  /* фон плашек языка и музыки */
 
   --serif: 'Cormorant Garamond', 'Times New Roman', Georgia, serif;
   --sans: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
@@ -224,27 +227,36 @@ p {
 .cover__photo {
   position: absolute;
   /* Запас за края: blur размывает и границы, иначе по периметру светлая кайма */
-  inset: -14px;
+  inset: -10px;
   z-index: 0;
-  background-color: var(--bg);
-  background-image:
+  background: var(--cover-photo) center / cover no-repeat;
+  /*
+   * Раньше фото полностью перекрашивалось в синий через blend-mode: luminosity
+   * и превращалось в плоский силуэт. Теперь оставляем половину собственной
+   * насыщенности — видны тёплые полутона и контур, — а синий тон даёт затемнение
+   * сверху. Размытие уменьшено с 2.5 до 1.2px, чтобы контур читался.
+   */
+  filter: saturate(0.5) brightness(0.86) contrast(1.06) blur(1.2px);
+}
+
+/*
+ * Затемнение — отдельным слоем, а не фоном того же элемента:
+ * иначе filter выше размыл бы и градиенты вместе с фотографией.
+ */
+.cover__scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background:
     linear-gradient(
       180deg,
-      rgba(16, 27, 45, 0.9) 0%,
-      rgba(16, 27, 45, 0.75) 28%,
-      rgba(16, 27, 45, 0.82) 56%,
-      rgba(16, 27, 45, 0.94) 82%,
-      var(--bg) 97%
+      rgb(var(--bg-rgb) / 0.82) 0%,
+      rgb(var(--bg-rgb) / 0.5) 28%,
+      rgb(var(--bg-rgb) / 0.58) 56%,
+      rgb(var(--bg-rgb) / 0.86) 82%,
+      var(--bg) 100%
     ),
-    radial-gradient(ellipse 82% 48% at 50% 43%, rgba(16, 27, 45, 0.55), rgba(16, 27, 45, 0) 70%),
-    var(--cover-photo);
-  background-size: auto, auto, cover;
-  background-position: center, center, center;
-  background-repeat: no-repeat;
-  background-blend-mode: normal, normal, luminosity;
-  /* Небольшое размытие превращает снимок из «сюжета» в атмосферу
-     и не даёт пальцам резать буквы имён */
-  filter: blur(2.5px);
+    radial-gradient(ellipse 82% 48% at 50% 43%, rgb(var(--bg-rgb) / 0.34), rgb(var(--bg-rgb) / 0) 70%);
 }
 
 /* Контент обложки — поверх фотослоя */
@@ -426,24 +438,25 @@ p {
  */
 .invitation__photo {
   position: absolute;
-  inset: -14px;
+  inset: -10px;
   z-index: 0;
-  background-color: var(--bg);
-  background-image:
-    linear-gradient(
-      180deg,
-      var(--bg) 0%,
-      rgba(20, 33, 53, 0.88) 12%,
-      rgba(20, 33, 53, 0.82) 50%,
-      rgba(20, 33, 53, 0.9) 88%,
-      var(--bg) 100%
-    ),
-    var(--invitation-photo);
-  background-size: auto, cover;
-  background-position: center, center;
-  background-repeat: no-repeat;
-  background-blend-mode: normal, luminosity;
-  filter: blur(3px);
+  background: var(--invitation-photo) center / cover no-repeat;
+  filter: saturate(0.45) brightness(0.8) contrast(1.05) blur(1.6px);
+}
+
+/* Затемнение плотнее, чем на обложке: здесь целый абзац текста */
+.invitation__scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: linear-gradient(
+    180deg,
+    var(--bg) 0%,
+    rgb(var(--bg-rgb) / 0.82) 12%,
+    rgb(var(--bg-rgb) / 0.74) 50%,
+    rgb(var(--bg-rgb) / 0.84) 88%,
+    var(--bg) 100%
+  );
 }
 
 .invitation__inner {
@@ -694,7 +707,7 @@ p {
   margin-top: clamp(40px, 7vh, 64px);
   font-size: 10px;
   letter-spacing: 0.06em;
-  color: #7f8da1;
+  color: #a3b1c6;
 }
 
 .credit a {
